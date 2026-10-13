@@ -37,6 +37,8 @@ public class MainController {
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             System.err.println("Error de carga de vista"+e.getMessage());
+            // AGREGADO: imprime el error completo y la causa real
+            e.printStackTrace();
         }
     }
 
