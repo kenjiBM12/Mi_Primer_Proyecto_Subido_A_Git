@@ -1,0 +1,22 @@
+
+package pe.edu.upeu.project_final.interfaces;
+
+import pe.edu.upeu.project_final.modelo.Cliente;
+import pe.edu.upeu.project_final.modelo.Habitacion;
+
+import java.util.List;
+
+public interface IHabitacionDao {
+    public boolean insert(Habitacion h);
+
+    public boolean update(Habitacion h);
+
+    public Habitacion searchById(int id);
+
+    public boolean delete(Habitacion h);
+
+    public List<Habitacion> listAll();
+
+    public Habitacion searchByDni(int Id);
+
+}
