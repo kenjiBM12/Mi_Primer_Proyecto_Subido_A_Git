@@ -33,13 +33,13 @@ public class HabitacionController {
     private TableColumn<Habitacion, Integer> ColId;
 
     @FXML
-    private TableColumn<Habitacion, Integer> ColNumero;
+    private TableColumn<Habitacion, String> ColNumero;
 
     @FXML
-    private TableColumn<Habitacion, Integer> ColNumeroPiso;
+    private TableColumn<Habitacion, String> ColNumeroPiso;
 
     @FXML
-    private TableColumn<Habitacion, Integer> ColNumeroHabitacion;
+    private TableColumn<Habitacion, String> ColNumeroHabitacion;
 
     @FXML
     private TableColumn<Habitacion, String> ColTipo;
@@ -51,54 +51,42 @@ public class HabitacionController {
     private TableColumn<Habitacion, String> ColEstado;
 
     private final IHabitacionDao habitacionDao = new HabitacionDaoImpl();
-
     private ObservableList<Habitacion> listaHabitacion;
 
     @FXML
     public void initialize() {
+        ColNum.setCellFactory(colum ->
+                new TableCell<>(){
+                    @Override
+                    protected void updateItem(Number item, boolean empty){
+                        super.updateItem(item,empty);
+                        if (empty){
+                            setText(null);
+                        }else{
+                            setText(String.valueOf(getIndex() +1));
+                        }
+                    }
+                });
 
-        ColNum.setCellFactory(columna ->
-                new TableCell<>() {
-            @Override
-            protected void updateItem(Number item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                setText(null);
-                } else {
-                    setText(String.valueOf(getIndex()+1));
-                }
-            }
-        });
-
-        ColId.setCellValueFactory(
-                celda ->
-                        celda.getValue().idHabitacionProperty().asObject());
-
+        ColId.setCellValueFactory(cellData ->
+                        cellData.getValue().idhabitacionProperty().asObject());
         ColNumero.setCellValueFactory(
-                celda ->
-
-                        celda.getValue().numeroProperty().asObject());
-
-        ColNumeroPiso.setCellValueFactory(
-                celdaData ->
-                        celdaData.getValue().numeroPisoProperty().asObject());
-
+                cellData ->
+                        cellData.getValue().numeroProperty());
+        ColNumeroPiso.setCellValueFactory(cellData ->
+                        cellData.getValue().numeroPisoProperty());
         ColNumeroHabitacion.setCellValueFactory(
                 cellData ->
-                        cellData.getValue().numeroHabitacionProperty().asObject());
-
+                        cellData.getValue().numeroHabitacionProperty());
         ColTipo.setCellValueFactory(
-                celLData ->
-                        celLData.getValue().tipoProperty());
-
+                cellData ->
+                        cellData.getValue().tipoProperty());
         ColPrecio.setCellValueFactory(
                 cellData ->
                         cellData.getValue().precioProperty().asObject());
-
-        ColEstado.setCellValueFactory(
-                cellData ->
+        ColEstado.setCellValueFactory(cellData ->
                         cellData.getValue().estadoProperty());
-
+        //llamar al metodo
         cargarDatos();
     }
 
@@ -126,12 +114,14 @@ public class HabitacionController {
             Optional<ButtonType> result = confirm.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-
                 if (habitacionDao.delete(selectId)) {
                     listaHabitacion.remove(selectId);
                 }
+            }
 
-
+            // CORREGIDO: mismo error que en Cliente. El else estaba dentro del
+            // if del OK y las llaves estaban desordenadas. Ahora el else
+            // pertenece al if (selectId != null).
         } else {
             Alert warning = utilAlert.mostrarAlerts(
                     "Seleccion requerida",
@@ -140,9 +130,7 @@ public class HabitacionController {
 
             warning.showAndWait();
         }
-        }
     }
-
     @FXML
     private void handleNew() {
         showForm(null);
@@ -155,10 +143,10 @@ public class HabitacionController {
 
         if (selectHabita != null) {
 
-            Habitacion habitacionFull = habitacionDao.searchById(
-                    selectHabita.getIdHabitacion());
+            Habitacion habitaFull = habitacionDao.searchById(
+                    selectHabita.getIdhabitacion());
 
-            showForm(habitacionFull);
+            showForm(habitaFull);
 
         } else {
             Alert alert = utilAlert.mostrarAlerts(
@@ -170,7 +158,7 @@ public class HabitacionController {
         }
     }
 
-    private void showForm(Habitacion habitacion) {
+    private void showForm(Habitacion h) {
 
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -181,11 +169,11 @@ public class HabitacionController {
 
             HabitacionFormController controller = loader.getController();
 
-            controller.setHabitacion(habitacion);
+            controller.setHabitacion(h);
 
             Stage stage = new Stage();
 
-            stage.setTitle(habitacion == null ?
+            stage.setTitle(h == null ?
                     "Nueva Habitacion" :
                     "Editar Habitacion");
 
@@ -197,7 +185,7 @@ public class HabitacionController {
 
                 Habitacion habitacionProcesada = controller.getHabitacion();
 
-                if (habitacion == null) {
+                if (h == null) {
 
                     boolean result = habitacionDao.insert(habitacionProcesada);
 

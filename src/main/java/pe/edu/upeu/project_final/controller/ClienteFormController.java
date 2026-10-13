@@ -36,8 +36,10 @@ public class ClienteFormController {
         return cliente;
     }
     private boolean validate(){
+        // CORREGIDO: antes usabas && (solo fallaba si AMBOS estaban vacios).
+        // Con || falla si falta cualquiera de los dos.
         if (txtNombre.getText().isEmpty()
-                && txtDni.getText().isEmpty()){
+                || txtDni.getText().isEmpty()){
             Alert alert = utilAlerts.mostrarAlerts("",
                     "Nombre y DNI son obligatorios",
                     "ERROR");

@@ -47,12 +47,16 @@ public class HabitacionFormController {
     // Validar los campos obligatorios
     private boolean validate() {
 
+        // CORREGIDO: && cambiado a ||, igual que en Cliente.
+        // AGREGADO: el tipo es obligatorio porque en la BD "tipo" es NOT NULL.
+        // Si estaba vacio, el insert fallaba.
         if (txtNumero.getText().isEmpty()
-                && txtNumeroHabitacion.getText().isEmpty()) {
+                || txtNumeroHabitacion.getText().isEmpty()
+                || cbTipo.getValue() == null) {
 
             Alert alert = utilAlerts.mostrarAlerts(
                     "",
-                    "numero y numero de habitacion obligatorio",
+                    "numero, numero de habitacion y tipo son obligatorios",
                     "ERROR");
 
             alert.show();
@@ -78,17 +82,32 @@ public class HabitacionFormController {
     @FXML
     private void handleSave() {
         if (validate()) {
-           if (habitacion == null){
-               habitacion = new Habitacion();
-               habitacion.setNumero(Integer.parseInt(txtNumero.getText()));
-               habitacion.setNumeroPiso(Integer.parseInt(txtNumeroPiso.getText()));
-               habitacion.setNumeroHabitacion(Integer.parseInt(txtNumeroHabitacion.getText()));
-               habitacion.setPrecio(Double.parseDouble(txtPrecio.getText()));
-               habitacion.setEstado(txtEstado.getText());
-               habitacion.setTipo(cbTipo.getValue());
-           }
+            // AGREGADO: try/catch porque Double.parseDouble revienta si el
+            // precio esta vacio o tiene letras.
+            try {
+                // CORREGIDO: el if solo crea el objeto. Antes todos los set
+                // estaban dentro del if, y al EDITAR no se guardaban los cambios.
+                if (habitacion == null)
+                    habitacion = new Habitacion();
+                habitacion.setNumero(txtNumero.getText());
+                habitacion.setNumeroPiso(txtNumeroPiso.getText());
+                habitacion.setNumeroHabitacion(txtNumeroHabitacion.getText());
+                habitacion.setPrecio(Double.parseDouble(txtPrecio.getText()));
+                habitacion.setEstado(txtEstado.getText());
+                habitacion.setTipo(cbTipo.getValue());
+                // CORREGIDO: faltaban estas 2 lineas. Sin saved = true el
+                // controller creia que cancelaste, y sin cerrar() la ventana
+                // no se cerraba.
+                saved = true;
+                cerrar();
+            } catch (NumberFormatException e) {
+                Alert alert = utilAlerts.mostrarAlerts("",
+                        "El precio debe ser un numero",
+                        "ERROR");
+                alert.show();
+            }
         }
-        }
+    }
     // Cargar los datos de una habitación para editar
     public void setHabitacion(Habitacion h) {
         this.habitacion = h;

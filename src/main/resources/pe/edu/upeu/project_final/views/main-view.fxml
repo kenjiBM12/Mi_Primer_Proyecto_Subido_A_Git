@@ -34,7 +34,7 @@
             mnemonicParsing="false" styleClass="nav-button" text="Inicio" />
             <Button maxWidth="-Infinity" onAction="#showClient"
                     mnemonicParsing="false" styleClass="nav-button" text="Clientes" />
-            <Button maxWidth="-Infinity" onAction="#showHome"
+            <Button maxWidth="-Infinity" onAction="#showHabita"
                     mnemonicParsing="false" styleClass="nav-button" text="Habitaciones"/>
         </children>
 

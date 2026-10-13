@@ -1,4 +1,3 @@
-
 package pe.edu.upeu.project_final.interfaces;
 
 import pe.edu.upeu.project_final.modelo.Habitacion;
@@ -16,6 +15,6 @@ public interface IHabitacionDao {
 
     public List<Habitacion> listAll();
 
-    public Habitacion searchByDni(int Id);
+    public Habitacion searchByNumero(String numero);
 
 }

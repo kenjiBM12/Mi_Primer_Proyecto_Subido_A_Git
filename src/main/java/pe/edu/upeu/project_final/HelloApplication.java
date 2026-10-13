@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class
                 .getResource("/pe/edu/upeu/project_final/views/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Main!");
+        stage.setTitle("Hotel - Residencias UPeU");
         stage.setScene(scene);
         stage.show();
     }

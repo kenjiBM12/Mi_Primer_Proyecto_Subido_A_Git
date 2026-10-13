@@ -16,13 +16,14 @@ public class HabitacionDaoImpl implements IHabitacionDao {
     @Override
     public boolean insert(Habitacion h) {
         boolean flag = false;
-        String query = "INSERT INTO habitacion(numero,numeroPiso,numeroHabitacion,tipo,precio,estado)VALUES(?,?,?,?,?,?);";
+        String query = "INSERT INTO habitacion(numero,numeroPiso,numeroHabitacion,tipo," +
+                "precio,estado)VALUES(?,?,?,?,?,?);";
         try (Connection cn = ConexionDB.getConnection();
              PreparedStatement st = cn.prepareStatement(query)) {
-            st.setInt(1,h.getNumero());
-            st.setInt(2,h.getNumeroPiso());
-            st.setInt(3,h.getIdHabitacion());
-            st.setObject(4,h.getTipo());
+            st.setString(1,h.getNumero());
+            st.setString(2,h.getNumeroPiso());
+           st.setString(3,h.getNumeroHabitacion());
+            st.setString(4,h.getTipo());
             st.setDouble(5,h.getPrecio());
             st.setString(6,h.getEstado());
             st.executeUpdate();
@@ -42,13 +43,13 @@ public class HabitacionDaoImpl implements IHabitacionDao {
                 " WHERE idhabitacion=?";
         try (Connection cn = ConexionDB.getConnection();
              PreparedStatement st = cn.prepareStatement(query)) {
-            st.setInt(1,h.getNumero());
-            st.setInt(2,h.getNumeroPiso());
-            st.setInt(3,h.getNumeroHabitacion());
+            st.setString(1,h.getNumero());
+            st.setString(2,h.getNumeroPiso());
+            st.setString(3,h.getNumeroHabitacion());
             st.setString(4,h.getTipo());
             st.setDouble(5,h.getPrecio());
             st.setString(6,h.getEstado());
-            st.setInt(7,h.getIdHabitacion());
+            st.setInt(7,h.getIdhabitacion());
             st.executeUpdate();
             flag=true;
         } catch (SQLException e) {
@@ -67,10 +68,10 @@ public class HabitacionDaoImpl implements IHabitacionDao {
             try( ResultSet rs = st.executeQuery()) {
                 if (rs.next()){
                     hab = new Habitacion();
-                    hab.setIdHabitacion(rs.getInt("idhabitacion"));
-                    hab.setNumero(rs.getInt("numero"));
-                    hab.setNumeroPiso(rs.getInt("numeroPiso"));
-                    hab.setNumeroHabitacion(rs.getInt("numeroHabitacion"));
+                    hab.setIdhabitacion(rs.getInt("idhabitacion"));
+                    hab.setNumero(rs.getString("numero"));
+                    hab.setNumeroPiso(rs.getString("numeroPiso"));
+                    hab.setNumeroHabitacion(rs.getString("numeroHabitacion"));
                     hab.setTipo(rs.getString("tipo"));
                     hab.setPrecio(rs.getDouble("precio"));
                     hab.setEstado(rs.getString("estado"));
@@ -87,7 +88,7 @@ public class HabitacionDaoImpl implements IHabitacionDao {
         String query = "DELETE FROM habitacion WHERE idhabitacion=?";
         try (Connection cn = ConexionDB.getConnection();
              PreparedStatement st = cn.prepareStatement(query)) {
-            st.setInt(1,h.getIdHabitacion());
+            st.setInt(1,h.getIdhabitacion());
             st.executeUpdate();
             flag=true;
         } catch (SQLException e) {
@@ -107,10 +108,10 @@ public class HabitacionDaoImpl implements IHabitacionDao {
         ) {
             while (rs.next()){
                Habitacion hab = new Habitacion();
-                hab.setIdHabitacion(rs.getInt("idhabitacion"));
-                hab.setNumero(rs.getInt("numero"));
-                hab.setNumeroPiso(rs.getInt("numeroPiso"));
-                hab.setNumeroHabitacion(rs.getInt("numeroHabitacion"));
+                hab.setIdhabitacion(rs.getInt("idhabitacion"));
+                hab.setNumero(rs.getString("numero"));
+                hab.setNumeroPiso(rs.getString("numeroPiso"));
+                hab.setNumeroHabitacion(rs.getString("numeroHabitacion"));
                 hab.setTipo(rs.getString("tipo"));
                 hab.setPrecio(rs.getDouble("precio"));
                 hab.setEstado(rs.getString("estado"));
@@ -124,28 +125,30 @@ public class HabitacionDaoImpl implements IHabitacionDao {
     }
 
     @Override
-    public Habitacion searchByDni(int Id) {
+    public Habitacion searchByNumero(String numero) {
         Habitacion hab = null;
-        String query = "SELECT * FROM habitacion WHERE id=?;";
+        // CORREGIDO: antes se llamaba searchByDni (copiado de Cliente) y usaba
+        // "WHERE id=?". Habitacion no tiene DNI: se busca por "numero", que en la
+        // BD es UNIQUE, asi sirve para saber si un numero ya existe.
+        String query = "SELECT * FROM habitacion WHERE numero=?;";
         try (Connection cn = ConexionDB.getConnection();
              PreparedStatement st = cn.prepareStatement(query)) {
-            st.setInt(1, Id);
+            st.setString(1, numero);
             try( ResultSet rs = st.executeQuery()) {
                 if (rs.next()){
                     hab = new Habitacion();
-                    hab.setIdHabitacion(rs.getInt("idhabitacion"));
-                    hab.setNumero(rs.getInt("numero"));
-                    hab.setNumeroPiso(rs.getInt("numeroPiso"));
-                    hab.setNumeroHabitacion(rs.getInt("numeroHabitacion"));
+                    hab.setIdhabitacion(rs.getInt("idhabitacion"));
+                    hab.setNumero(rs.getString("numero"));
+                    hab.setNumeroPiso(rs.getString("numeroPiso"));
+                    hab.setNumeroHabitacion(rs.getString("numeroHabitacion"));
                     hab.setTipo(rs.getString("tipo"));
                     hab.setPrecio(rs.getDouble("precio"));
                     hab.setEstado(rs.getString("estado"));
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar habitacion por Id:" + e.getMessage());
+            System.out.println("Error al buscar habitacion por numero:" + e.getMessage());
         }
         return hab;
     }
 }
-

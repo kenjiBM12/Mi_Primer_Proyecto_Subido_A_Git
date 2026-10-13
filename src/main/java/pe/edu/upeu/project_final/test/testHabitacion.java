@@ -16,7 +16,7 @@ public class testHabitacion {
             List<Habitacion> lista = hab.listAll();
             if (lista != null && !lista.isEmpty()) {
                 for (Habitacion habitacion : lista) {
-                    System.out.println("ID_HABITACION:" + habitacion.getIdHabitacion());
+                    System.out.println("ID_HABITACION:" + habitacion.getIdhabitacion());
                     System.out.println("NUMERO:" + habitacion.getNumero());
                     System.out.println("NUMERO_PISO:" + habitacion.getNumeroPiso());
                     System.out.println("NUMERO_HABITACION:" + habitacion.getNumeroHabitacion());
@@ -30,11 +30,11 @@ public class testHabitacion {
         }
         public static void insertar(){
             Habitacion ha = new Habitacion();
-            ha.setNumero(002);
-            ha.setNumeroPiso(2);
-            ha.setNumeroHabitacion(102);
+            ha.setNumero("002");
+            ha.setNumeroPiso("2");
+            ha.setNumeroHabitacion("102");
             ha.setTipo("matrimonial");
-            ha.setPrecio(120.0);
+            ha.setPrecio(120);
             ha.setEstado("disponible");
             boolean result = hab.insert(ha);
             if (result){
@@ -46,7 +46,7 @@ public class testHabitacion {
     public static void searByNumero(){
         Habitacion h = new Habitacion();
         if (h!= null) {
-            System.out.println("ID_HABITACION:" + h.getIdHabitacion());
+            System.out.println("ID_HABITACION:" + h.getIdhabitacion());
             System.out.println("NUMERO:" + h.getNumero());
             System.out.println("NUMERO_PISO:" + h.getNumeroPiso());
             System.out.println("NUMERO_HABITACION:" + h.getNumeroHabitacion());
@@ -58,7 +58,7 @@ public class testHabitacion {
 
         public static void eliminar(){
             Habitacion h = new Habitacion();
-            h.setIdHabitacion(2);
+            h.setIdhabitacion(2);
             boolean result = hab.delete(h);
             if (result){
                 System.out.println("delete success");

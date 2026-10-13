@@ -91,26 +91,29 @@ public class ClienteController {
     private void handleDelete(){
         Cliente selectId =
                 tableCliente.getSelectionModel().getSelectedItem();
-       if (selectId !=null){
-           Alert confirm = utilAlert.mostrarAlerts(
-                   "Confirmar eliminacion",
-                   "Estas seguro de eliminar el cliente:"
-                           +selectId.getNombre()+"?",
-                   "CONFIRMATION");
-           Optional<ButtonType> result = confirm.showAndWait();
-           if (result.isPresent() && result.get() == ButtonType.OK){
-               if (clienteDao.delete(selectId)){
-                   listaClientes.remove(selectId);
-
-               }
-           }else{
+        if (selectId !=null){
+            Alert confirm = utilAlert.mostrarAlerts(
+                    "Confirmar eliminacion",
+                    "Estas seguro de eliminar el cliente:"
+                            +selectId.getNombre()+"?",
+                    "CONFIRMATION");
+            Optional<ButtonType> result = confirm.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK){
+                if (clienteDao.delete(selectId)){
+                    listaClientes.remove(selectId);
+                }
+            }
+            // CORREGIDO: el else estaba pegado al if de "result == OK".
+            // Por eso, si no seleccionabas nada no pasaba nada, y si le dabas
+            // Cancelar te salia el aviso de "seleccione un cliente".
+            // El else debe ir con el if (selectId != null).
+        }else{
             Alert warning =  utilAlert.mostrarAlerts(
                     "Seleccion requerida",
-                      "Seleccione un cliente para eliminar",
+                    "Seleccione un cliente para eliminar",
                     "WARNING");
-                warning.showAndWait();
-           }
-       }
+            warning.showAndWait();
+        }
     }
 
     @FXML
