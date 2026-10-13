@@ -1,7 +1,6 @@
 
 package pe.edu.upeu.project_final.interfaces;
 
-import pe.edu.upeu.project_final.modelo.Cliente;
 import pe.edu.upeu.project_final.modelo.Habitacion;
 
 import java.util.List;

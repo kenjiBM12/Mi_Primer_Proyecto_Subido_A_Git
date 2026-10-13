@@ -4,7 +4,6 @@ package pe.edu.upeu.project_final.test;
 import pe.edu.upeu.project_final.implementacion.HabitacionDaoImpl;
 
 import pe.edu.upeu.project_final.interfaces.IHabitacionDao;
-
 import pe.edu.upeu.project_final.modelo.Habitacion;
 
 import java.util.List;
@@ -44,6 +43,18 @@ public class testHabitacion {
                 System.out.println("insert error");
             }
         }
+    public static void searByNumero(){
+        Habitacion h = new Habitacion();
+        if (h!= null) {
+            System.out.println("ID_HABITACION:" + h.getIdHabitacion());
+            System.out.println("NUMERO:" + h.getNumero());
+            System.out.println("NUMERO_PISO:" + h.getNumeroPiso());
+            System.out.println("NUMERO_HABITACION:" + h.getNumeroHabitacion());
+            System.out.println("TIPO:" + h.getTipo());
+            System.out.println("PRECIO:" + h.getPrecio());
+            System.out.println("ESTADO: " + h.getEstado());
+        }
+    }
 
         public static void eliminar(){
             Habitacion h = new Habitacion();

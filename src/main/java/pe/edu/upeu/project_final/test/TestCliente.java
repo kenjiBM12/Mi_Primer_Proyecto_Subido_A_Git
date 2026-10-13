@@ -3,6 +3,7 @@ package pe.edu.upeu.project_final.test;
 import pe.edu.upeu.project_final.implementacion.ClienteDaoImpl;
 import pe.edu.upeu.project_final.interfaces.IClienteDao;
 import pe.edu.upeu.project_final.modelo.Cliente;
+import pe.edu.upeu.project_final.modelo.Habitacion;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class TestCliente {
             System.out.println("insert error");
         }
     }
+
 
     public static void eliminar(){
         Cliente c = new Cliente();
