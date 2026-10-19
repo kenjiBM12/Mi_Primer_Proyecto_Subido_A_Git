@@ -15,6 +15,7 @@ module pe.edu.upeu.project_final {
     requires javafx.graphics;
 
 
+
     opens pe.edu.upeu.project_final to javafx.fxml;
 
     opens pe.edu.upeu.project_final.modelo to javafx.base, javafx.fxml;
