@@ -105,11 +105,42 @@ public class ReservaDaoImpl  implements IReservaDao {
 
     @Override
     public boolean UpdateStatus(Reserva r) {
-        return false;
+        boolean flag = false;
+        String query = " UPDATE reserva SET estado= ? WHERE idreserva=?; ";
+        try (Connection cn = ConexionDB.getConnection();
+             PreparedStatement st = cn.prepareStatement(query)) {
+            st.setString(1,r.getEstado());
+            st.setInt(2,r.getIdreserva());
+
+            st.executeUpdate();
+            flag=true;
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar cliente:" + e.getMessage());
+        }
+        return flag;
     }
 
     @Override
     public boolean ValidateHabitacion(Reserva r) {
-        return false;
+        boolean flag = false;
+        String query = " SELECT count(*) FROM reserva WHERE habitacionId =? " +
+                "AND estado IN('R','O') " +
+                "AND (? < fecha_salida " +
+                "AND ? > fecha_ingreso ) ";
+        try (Connection cn = ConexionDB.getConnection();
+             PreparedStatement st = cn.prepareStatement(query)) {
+            st.setInt(1,r.getHabitacion().getIdhabitacion());
+            st.setString(2,r.getFechaIngreso().toString());
+            st.setString(3,r.getFechaSalida().toString());
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                flag = rs.getInt(1) == 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al validar habitacion:" + e.getMessage());
+        }
+        return flag;
     }
+
 }

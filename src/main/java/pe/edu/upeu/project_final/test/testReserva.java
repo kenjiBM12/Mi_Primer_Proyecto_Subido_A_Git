@@ -48,15 +48,30 @@ public class testReserva {
                 System.out.println("PRECIO: " + res.getHabitacion().getPrecio());
                 System.out.println("NOMBRE: " + res.getCliente().getNombre());
                 System.out.println("TOTAL: " + res.getTotal());
+                System.out.println("Estado: "+ res.getEstado());
 
             }
         } else {
             System.out.println("no hay registros");
         }
     }
+
+    public void updateStatus(){
+        Reserva r = new Reserva();
+
+        r.setEstado("D");
+        r.setIdreserva(1);
+        boolean resul = dao.UpdateStatus(r);
+        if (resul) {
+            System.out.println("status reserva correcto");
+        } else {
+            System.out.println("estatus incorrect");
+        }
+    }
     public static void main(String[] args) {
 testReserva t = new testReserva();
 t.listar();
+t.updateStatus();
 
     }
 
